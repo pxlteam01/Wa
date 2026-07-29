@@ -1,482 +1,403 @@
 // ============================================================
-// LUCHIVER ENGINE v3.0
-// Black + Red Theme | Full Dashboard
-// Shizuku Ready | Module Installer | Inject System
-// Created by Lyx Ai
+// LUCHIVER DEPLOY — REAL DEPLOY TO VERCEL
+// API Key: vcp_4utMiDfFAk6PQmKfILVSSNuLftpTRkjGfAndnuvAxejWbIYSAr4LUrYj
+// Created by @Manzy
 // ============================================================
 
 (function() {
     'use strict';
 
-    // ===== CONFIG =====
-    const CONFIG = {
-        username: localStorage.getItem('luchiver_username') || 'admin',
-        password: localStorage.getItem('luchiver_password') || 'admin123'
-    };
+    // ===== API KEY =====
+    const VERCEL_API_KEY = 'vcp_4utMiDfFAk6PQmKfILVSSNuLftpTRkjGfAndnuvAxejWbIYSAr4LUrYj';
 
-    // ===== DOM REFS =====
-    // Login
-    const loginOverlay = document.getElementById('loginOverlay');
-    const loginUser = document.getElementById('loginUser');
-    const loginPass = document.getElementById('loginPass');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    const dashboard = document.getElementById('dashboard');
-
-    // Sidebar
-    const menuItems = document.querySelectorAll('.menu-item');
-    const pages = document.querySelectorAll('.page');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // Stats
-    const cpuStats = document.getElementById('cpuStats');
-    const ramStats = document.getElementById('ramStats');
-    const batteryStats = document.getElementById('batteryStats');
-    const storageStats = document.getElementById('storageStats');
-
-    // Home
-    const deviceNameHome = document.getElementById('deviceNameHome');
-    const socNameHome = document.getElementById('socNameHome');
-    const gpuNameHome = document.getElementById('gpuNameHome');
-    const entropyHome = document.getElementById('entropyHome');
-    const uptimeHome = document.getElementById('uptimeHome');
-    const moduleCountHome = document.getElementById('moduleCountHome');
-
-    // System
-    const deviceNameSys = document.getElementById('deviceNameSys');
-    const socNameSys = document.getElementById('socNameSys');
-    const gpuNameSys = document.getElementById('gpuNameSys');
-    const androidSys = document.getElementById('androidSys');
-    const browserSys = document.getElementById('browserSys');
-    const screenSys = document.getElementById('screenSys');
-    const entropySys = document.getElementById('entropySys');
-    const uptimeSys = document.getElementById('uptimeSys');
-    const ramTotalSys = document.getElementById('ramTotalSys');
-    const cpuCoresSys = document.getElementById('cpuCoresSys');
-    const langSys = document.getElementById('langSys');
-    const platformSys = document.getElementById('platformSys');
-    const shizukuSys = document.getElementById('shizukuSys');
-    const modulesSys = document.getElementById('modulesSys');
-    const sessionSys = document.getElementById('sessionSys');
-
-    // Modules
-    const moduleList = document.getElementById('moduleList');
-    const moduleCountPage = document.getElementById('moduleCountPage');
-    const moduleBadge = document.getElementById('moduleBadge');
-    const installBtn = document.getElementById('installBtn');
-    const clearModulesBtn = document.getElementById('clearModulesBtn');
-
-    // Shizuku
-    const shizukuDotMini = document.getElementById('shizukuDotMini');
-    const shizukuTextMini = document.getElementById('shizukuTextMini');
-    const shizukuDotHome = document.getElementById('shizukuDotHome');
-    const shizukuTextHome = document.getElementById('shizukuTextHome');
-    const shizukuDotBig = document.getElementById('shizukuDotBig');
-    const shizukuTextBig = document.getElementById('shizukuTextBig');
-
-    // Inject
-    const injectSelect = document.getElementById('injectSelect');
-    const injectBtn = document.getElementById('injectBtn');
-    const injectStatus = document.getElementById('injectStatus');
-    const injectProgress = document.getElementById('injectProgress');
-    const injectLog = document.getElementById('injectLog');
-    const injectProgressFill = document.getElementById('injectProgressFill');
-    const injectResult = document.getElementById('injectResult');
-    const injectResultText = document.getElementById('injectResultText');
-
-    // Settings
-    const settingsUser = document.getElementById('settingsUser');
-    const settingsModuleCount = document.getElementById('settingsModuleCount');
-    const changeUserBtn = document.getElementById('changeUserBtn');
-    const changePassBtn = document.getElementById('changePassBtn');
-    const clearAllDataBtn = document.getElementById('clearAllDataBtn');
-
-    // Live time
-    const liveTimeHome = document.getElementById('liveTimeHome');
-
-    // Modals
-    const installModal = document.getElementById('installModal');
-    const moduleNameInput = document.getElementById('moduleNameInput');
-    const confirmInstallBtn = document.getElementById('confirmInstallBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const dragArea = document.getElementById('dragArea');
-
-    const userModal = document.getElementById('userModal');
-    const newUsername = document.getElementById('newUsername');
-    const confirmUserBtn = document.getElementById('confirmUserBtn');
-    const cancelUserModal = document.getElementById('cancelUserModal');
-    const closeUserModal = document.getElementById('closeUserModal');
-
-    const passModal = document.getElementById('passModal');
-    const newPassword = document.getElementById('newPassword');
-    const confirmPassBtn = document.getElementById('confirmPassBtn');
-    const cancelPassModal = document.getElementById('cancelPassModal');
-    const closePassModal = document.getElementById('closePassModal');
+    // ===== DOM =====
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileList = document.getElementById('fileList');
+    const deployBtn = document.getElementById('deployBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const previewFrame = document.getElementById('previewFrame');
+    const previewOverlay = document.getElementById('previewOverlay');
+    const previewStatus = document.getElementById('previewStatus');
+    const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
+    const openPreviewBtn = document.getElementById('openPreviewBtn');
+    const deployStatus = document.getElementById('deployStatus');
+    const statusIcon = document.getElementById('statusIcon');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusMessage = document.getElementById('statusMessage');
+    const progressFill = document.getElementById('progressFill');
+    const statusUrl = document.getElementById('statusUrl');
+    const deployUrl = document.getElementById('deployUrl');
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.querySelector('.nav-links');
 
     // ===== STATE =====
-    let modules = JSON.parse(localStorage.getItem('luchiver_modules')) || [];
-    let startTime = Date.now();
-    let isLoggedIn = false;
-    let selectedModule = null;
-    let isInjecting = false;
+    let uploadedFiles = [];
+    let isDeploying = false;
 
-    // ===== DEVICE DETECTION =====
-    function detectDevice() {
-        const ua = navigator.userAgent;
-        let device = 'Unknown',
-            soc = 'Unknown',
-            gpu = 'Unknown',
-            android = 'Unknown';
+    // ================================================================
+    // MENU TOGGLE
+    // ================================================================
 
-        if (ua.includes('Android')) {
-            const match = ua.match(/Android\s([\d.]+)/);
-            if (match) android = match[1];
-            if (ua.includes('Infinix')) { device = 'Infinix';
-                soc = 'MediaTek Helio';
-                gpu = 'Mali'; } else if (ua.includes('Samsung')) { device = 'Samsung';
-                soc = 'Exynos';
-                gpu = 'Mali'; } else if (ua.includes('Xiaomi') || ua.includes('Redmi')) { device = 'Xiaomi';
-                soc = 'Snapdragon';
-                gpu = 'Adreno'; } else if (ua.includes('Pixel')) { device = 'Google Pixel';
-                soc = 'Google Tensor';
-                gpu = 'Mali'; } else if (ua.includes('OPPO')) { device = 'OPPO';
-                soc = 'Snapdragon';
-                gpu = 'Adreno'; } else if (ua.includes('Realme')) { device = 'Realme';
-                soc = 'Snapdragon';
-                gpu = 'Adreno'; } else if (ua.includes('Vivo')) { device = 'Vivo';
-                soc = 'Snapdragon';
-                gpu = 'Adreno'; } else { device = 'Android Device';
-                soc = 'Snapdragon';
-                gpu = 'Adreno'; }
-        } else if (ua.includes('iPhone') || ua.includes('iPad')) {
-            device = 'Apple';
-            soc = 'Apple A-series';
-            gpu = 'Apple GPU';
-            android = 'iOS';
-        } else if (ua.includes('Windows')) {
-            device = 'Windows PC';
-            soc = 'Intel/AMD';
-            gpu = 'Unknown';
-        } else if (ua.includes('Mac')) {
-            device = 'Mac';
-            soc = 'Apple M-series';
-            gpu = 'Apple GPU';
+    menuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', function() {
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ================================================================
+    // FILE UPLOAD
+    // ================================================================
+
+    uploadArea.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'INPUT') {
+            fileInput.click();
         }
+    });
 
-        return { device, soc, gpu, android };
-    }
-
-    const deviceInfo = detectDevice();
-
-    // ===== SHIZUKU CHECK =====
-    function checkShizuku() {
-        const ready = Math.random() > 0.12;
-        const dotClass = ready ? 'online' : 'offline';
-        const text = ready ? 'Shizuku ready' : 'Shizuku not connected';
-
-        const dots = [shizukuDotMini, shizukuDotHome, shizukuDotBig];
-        const texts = [shizukuTextMini, shizukuTextHome, shizukuTextBig];
-
-        dots.forEach(d => { d.className = 'fas fa-circle ' + dotClass; });
-        texts.forEach(t => { t.textContent = text; });
-
-        if (shizukuSys) shizukuSys.textContent = ready ? '✅ Connected' : '❌ Not Connected';
-        return ready;
-    }
-
-    // ===== STATS =====
-    function getRAM() {
-        let total = 8;
-        if (navigator.deviceMemory) total = navigator.deviceMemory;
-        const used = total * (0.30 + Math.random() * 0.25);
-        return { total, used };
-    }
-
-    function getCPU() {
-        return { usage: 5 + Math.random() * 40, cores: navigator.hardwareConcurrency || 8 };
-    }
-
-    async function getBattery() {
-        if (navigator.getBattery) {
-            try {
-                const b = await navigator.getBattery();
-                return { level: b.level * 100, charging: b.charging };
-            } catch { return { level: 50 + Math.random() * 45, charging: false }; }
+    fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files.length > 0) {
+            const files = Array.from(this.files);
+            files.forEach(file => {
+                if (!uploadedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    uploadedFiles.push(file);
+                }
+            });
+            renderFiles();
+            updateButtons();
+            this.value = '';
         }
-        return { level: 50 + Math.random() * 45, charging: false };
-    }
+    });
 
-    function getStorage() {
-        let total = 128,
-            used = total * (0.15 + Math.random() * 0.25);
-        return { total, used };
-    }
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
 
-    function getEntropy() {
-        return Math.round(128 + Math.random() * 3840);
-    }
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
 
-    function getBrowser() {
-        const ua = navigator.userAgent;
-        if (ua.includes('Chrome')) return 'Chrome';
-        if (ua.includes('Firefox')) return 'Firefox';
-        if (ua.includes('Safari')) return 'Safari';
-        if (ua.includes('Edge')) return 'Edge';
-        return 'Unknown';
-    }
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach(file => {
+                if (!uploadedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    uploadedFiles.push(file);
+                }
+            });
+            renderFiles();
+            updateButtons();
+        }
+    });
 
-    // ===== UPDATE STATS =====
-    async function updateStats() {
-        const ram = getRAM();
-        const cpu = getCPU();
-        const battery = await getBattery();
-        const storage = getStorage();
-        const entropy = getEntropy();
+    // ================================================================
+    // RENDER FILES
+    // ================================================================
 
-        // Stats
-        cpuStats.textContent = Math.round(cpu.usage) + '%';
-        ramStats.textContent = ram.used.toFixed(1) + 'GB';
-        batteryStats.textContent = Math.round(battery.level) + '%';
-        storageStats.textContent = storage.used.toFixed(1) + 'GB';
-
-        // Home Info
-        deviceNameHome.textContent = deviceInfo.device;
-        socNameHome.textContent = deviceInfo.soc;
-        gpuNameHome.textContent = deviceInfo.gpu;
-        entropyHome.textContent = entropy + ' / 4096';
-        moduleCountHome.textContent = modules.length;
-
-        // System Info
-        deviceNameSys.textContent = deviceInfo.device;
-        socNameSys.textContent = deviceInfo.soc;
-        gpuNameSys.textContent = deviceInfo.gpu;
-        androidSys.textContent = deviceInfo.android || 'Unknown';
-        browserSys.textContent = getBrowser();
-        screenSys.textContent = window.innerWidth + 'x' + window.innerHeight;
-        entropySys.textContent = entropy + ' / 4096';
-        ramTotalSys.textContent = ram.total.toFixed(1) + 'GB';
-        cpuCoresSys.textContent = cpu.cores + ' Cores';
-        langSys.textContent = navigator.language || 'Unknown';
-        platformSys.textContent = navigator.platform || 'Unknown';
-        modulesSys.textContent = modules.length + ' modules';
-
-        // Uptime
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        const hours = Math.floor(elapsed / 3600);
-        const mins = Math.floor((elapsed % 3600) / 60);
-        const secs = elapsed % 60;
-        const uptimeStr = `${hours}h ${mins}m ${secs}s`;
-        uptimeHome.textContent = uptimeStr;
-        uptimeSys.textContent = uptimeStr;
-
-        // Session
-        if (sessionSys) sessionSys.textContent = isLoggedIn ? 'Active' : 'Inactive';
-
-        // Live time
-        const now = new Date();
-        liveTimeHome.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    }
-
-    // ===== MODULES =====
-    function renderModules() {
-        if (modules.length === 0) {
-            moduleList.innerHTML = `
+    function renderFiles() {
+        if (uploadedFiles.length === 0) {
+            fileList.innerHTML = `
                 <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <p>Belum ada module terpasang</p>
+                    <i class="fas fa-folder-open"></i>
+                    <p>No files uploaded yet</p>
                 </div>
             `;
-            const count = '0';
-            moduleCountPage.textContent = count;
-            moduleBadge.textContent = '0';
-            settingsModuleCount.textContent = '0 modules';
-            renderInjectSelect();
             return;
         }
 
-        moduleList.innerHTML = modules.map((mod, index) => `
-            <div class="module-item">
-                <span class="name"><i class="fas fa-puzzle-piece" style="color:#ff0033;margin-right:8px;"></i>${mod}</span>
-                <span class="status">● Active</span>
-                <button class="remove-btn" data-index="${index}">
+        fileList.innerHTML = uploadedFiles.map((file, index) => `
+            <div class="file-item">
+                <i class="fas ${getFileIcon(file.name)}"></i>
+                <span class="file-name">${file.name}</span>
+                <span class="file-size">${formatFileSize(file.size)}</span>
+                <button class="file-remove" data-index="${index}">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         `).join('');
 
-        const count = modules.length;
-        moduleCountPage.textContent = count;
-        moduleBadge.textContent = count;
-        settingsModuleCount.textContent = count + ' modules';
-
-        document.querySelectorAll('.remove-btn').forEach(btn => {
+        document.querySelectorAll('.file-remove').forEach(btn => {
             btn.addEventListener('click', function() {
                 const index = parseInt(this.dataset.index);
-                modules.splice(index, 1);
-                localStorage.setItem('luchiver_modules', JSON.stringify(modules));
-                renderModules();
-                showToast('🗑️ Module dihapus', 'info');
+                uploadedFiles.splice(index, 1);
+                renderFiles();
+                updateButtons();
+                if (previewFrame.srcdoc !== 'about:blank') {
+                    buildPreview();
+                }
             });
         });
-
-        renderInjectSelect();
     }
 
-    function renderInjectSelect() {
-        if (modules.length === 0) {
-            injectSelect.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <p>Install module dulu</p>
-                </div>
-            `;
-            selectedModule = null;
+    function getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const icons = {
+            'html': 'fa-html5',
+            'htm': 'fa-html5',
+            'css': 'fa-css3-alt',
+            'js': 'fa-js',
+            'json': 'fa-code',
+            'png': 'fa-image',
+            'jpg': 'fa-image',
+            'jpeg': 'fa-image',
+            'gif': 'fa-image',
+            'svg': 'fa-image',
+            'ico': 'fa-image',
+            'webp': 'fa-image',
+            'txt': 'fa-file-alt',
+            'xml': 'fa-code',
+            'webmanifest': 'fa-code'
+        };
+        return icons[ext] || 'fa-file';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // ================================================================
+    // UPDATE BUTTONS
+    // ================================================================
+
+    function updateButtons() {
+        const hasFiles = uploadedFiles.length > 0;
+        deployBtn.disabled = !hasFiles || isDeploying;
+        previewBtn.disabled = !hasFiles;
+    }
+
+    // ================================================================
+    // BUILD PREVIEW
+    // ================================================================
+
+    function buildPreview() {
+        const htmlFile = uploadedFiles.find(f => f.name.match(/\.(html|htm)$/i));
+        if (!htmlFile) {
+            showToast('No HTML file found for preview');
             return;
         }
 
-        injectSelect.innerHTML = modules.map((mod) => `
-            <div class="inject-item" data-module="${mod}">
-                <i class="fas fa-puzzle-piece"></i>
-                ${mod}
-            </div>
-        `).join('');
-
-        document.querySelectorAll('.inject-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.inject-item').forEach(el => el.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedModule = this.dataset.module;
-            });
-        });
-
-        // Select first by default
-        const first = document.querySelector('.inject-item');
-        if (first) {
-            first.classList.add('selected');
-            selectedModule = first.dataset.module;
-        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let content = e.target.result;
+            previewFrame.srcdoc = content;
+            previewOverlay.classList.add('hidden');
+            previewStatus.textContent = '● Live';
+            previewStatus.style.color = '#22c55e';
+        };
+        reader.readAsText(htmlFile);
     }
 
-    function installModule(name) {
-        if (!name || name.trim() === '') {
-            showToast('❌ Masukkan nama module!', 'error');
-            return false;
+    previewBtn.addEventListener('click', buildPreview);
+
+    refreshPreviewBtn.addEventListener('click', function() {
+        if (uploadedFiles.length > 0) {
+            buildPreview();
+            showToast('🔄 Preview refreshed');
         }
-        const clean = name.trim();
-        if (modules.includes(clean)) {
-            showToast('⚠️ Module sudah terpasang!', 'error');
-            return false;
-        }
-        modules.push(clean);
-        localStorage.setItem('luchiver_modules', JSON.stringify(modules));
-        renderModules();
-        showToast(`✅ Module "${clean}" berhasil dipasang!`, 'success');
-        return true;
-    }
+    });
 
-    function clearModules() {
-        if (modules.length === 0) {
-            showToast('ℹ️ Tidak ada module', 'info');
-            return;
-        }
-        if (confirm('Hapus semua module?')) {
-            modules = [];
-            localStorage.setItem('luchiver_modules', JSON.stringify(modules));
-            renderModules();
-            showToast('🗑️ Semua module dihapus', 'info');
-        }
-    }
-
-    function clearAllData() {
-        if (confirm('Hapus semua data? (modules + settings)')) {
-            modules = [];
-            localStorage.removeItem('luchiver_modules');
-            localStorage.removeItem('luchiver_username');
-            localStorage.removeItem('luchiver_password');
-            renderModules();
-            showToast('🗑️ Semua data dihapus', 'info');
-            setTimeout(() => location.reload(), 1000);
-        }
-    }
-
-    // ===== INJECT SYSTEM =====
-    function startInject() {
-        if (isInjecting) return;
-        if (!selectedModule) {
-            showToast('❌ Pilih module terlebih dahulu!', 'error');
-            return;
-        }
-
-        // Check Shizuku
-        if (!checkShizuku()) {
-            showToast('❌ Shizuku tidak terhubung!', 'error');
-            return;
-        }
-
-        isInjecting = true;
-        injectBtn.disabled = true;
-        injectStatus.textContent = 'Injecting...';
-        injectProgress.style.display = 'block';
-        injectResult.style.display = 'none';
-        injectLog.innerHTML = '';
-        injectProgressFill.style.width = '0%';
-
-        const logs = [
-            '▶ Initializing injector...',
-            '▶ Checking Shizuku connection...',
-            '▶ Shizuku connected ✅',
-            `▶ Loading module: ${selectedModule}...`,
-            '▶ Applying optimization profile...',
-            '▶ OOM adj tuned -17',
-            '▶ dex2oat speed-profile...',
-            '▶ AOT cache populated',
-            '▶ GPU governor locked: performance',
-            '▶ Module injected successfully! 🎉'
-        ];
-
-        let step = 0;
-        const interval = setInterval(() => {
-            if (step < logs.length) {
-                const logLine = document.createElement('div');
-                logLine.className = 'log-line';
-                logLine.textContent = '▸ ' + logs[step];
-                if (step === logs.length - 1) logLine.className = 'log-line done';
-                injectLog.appendChild(logLine);
-                injectLog.scrollTop = injectLog.scrollHeight;
-
-                const progress = ((step + 1) / logs.length) * 100;
-                injectProgressFill.style.width = progress + '%';
-                step++;
-            } else {
-                clearInterval(interval);
-                isInjecting = false;
-                injectBtn.disabled = false;
-                injectStatus.textContent = 'Done';
-                injectResult.style.display = 'flex';
-                injectResultText.textContent = `Module "${selectedModule}" injected successfully! ✅`;
-                showToast(`✅ Module "${selectedModule}" injected!`, 'success');
+    openPreviewBtn.addEventListener('click', function() {
+        if (previewFrame.srcdoc && previewFrame.srcdoc !== 'about:blank') {
+            const win = window.open('', '_blank');
+            if (win) {
+                win.document.write(previewFrame.srcdoc);
+                win.document.close();
             }
-        }, 400);
+        } else {
+            showToast('No preview available to open');
+        }
+    });
+
+    // ================================================================
+    // REAL DEPLOY TO VERCEL (PAKAI API KEY)
+    // ================================================================
+
+    deployBtn.addEventListener('click', function() {
+        if (isDeploying || uploadedFiles.length === 0) return;
+        startDeploy();
+    });
+
+    async function startDeploy() {
+        isDeploying = true;
+        deployBtn.disabled = true;
+        deployBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deploying...';
+        deployStatus.style.display = 'block';
+        statusIcon.className = 'status-icon';
+        statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        statusTitle.textContent = 'Deploying to Vercel...';
+        statusMessage.textContent = 'Uploading your files...';
+        progressFill.style.width = '0%';
+        statusUrl.style.display = 'none';
+
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 6 + 2;
+            if (progress > 95) progress = 95;
+            progressFill.style.width = progress + '%';
+        }, 200);
+
+        try {
+            // Build file tree for Vercel
+            const files = {};
+            let hasHtml = false;
+
+            for (const file of uploadedFiles) {
+                const content = await readFileAsBase64(file);
+                files[file.name] = content;
+                if (file.name.match(/\.(html|htm)$/i)) hasHtml = true;
+            }
+
+            if (!hasHtml) {
+                throw new Error('No HTML file found. Please upload an index.html');
+            }
+
+            // Call Vercel API
+            const response = await fetch('https://api.vercel.com/v12/deployments', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + VERCEL_API_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: 'deployhub-' + Date.now().toString(36),
+                    files: files,
+                    projectSettings: {
+                        framework: null,
+                        devCommand: null,
+                        installCommand: null,
+                        buildCommand: null,
+                        outputDirectory: null
+                    }
+                })
+            });
+
+            const data = await response.json();
+
+            clearInterval(progressInterval);
+            progressFill.style.width = '100%';
+
+            if (data.url) {
+                const deployUrlFull = `https://${data.url}`;
+                statusIcon.className = 'status-icon success';
+                statusIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                statusTitle.textContent = '✅ Deployment Successful!';
+                statusMessage.textContent = 'Your website is now live.';
+                statusUrl.style.display = 'flex';
+                deployUrl.href = deployUrlFull;
+                deployUrl.textContent = deployUrlFull;
+                showToast('✅ Deployed to ' + deployUrlFull);
+            } else if (data.error) {
+                throw new Error(data.error.message || 'Deployment failed');
+            } else {
+                throw new Error('Unknown error from Vercel API');
+            }
+
+        } catch (error) {
+            clearInterval(progressInterval);
+            statusIcon.className = 'status-icon error';
+            statusIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            statusTitle.textContent = '❌ Deployment Failed';
+            statusMessage.textContent = error.message || 'Something went wrong. Please try again.';
+            showToast('❌ ' + error.message);
+        }
+
+        isDeploying = false;
+        deployBtn.disabled = false;
+        deployBtn.innerHTML = '<i class="fas fa-rocket"></i> Deploy to Vercel';
+        updateButtons();
     }
 
-    // ===== NAVIGATION =====
-    function navigateTo(page) {
-        menuItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.page === page);
-        });
-        pages.forEach(p => {
-            p.classList.toggle('active', p.id === 'page-' + page);
+    // ===== READ FILE AS BASE64 =====
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result.split(',')[1];
+                resolve(base64);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
         });
     }
 
-    // ===== TOAST =====
-    function showToast(message, type = 'info') {
+    // ================================================================
+    // COPY URL
+    // ================================================================
+
+    window.copyUrl = function() {
+        const url = deployUrl.href;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('✅ URL copied to clipboard');
+            });
+        } else {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showToast('✅ URL copied to clipboard');
+        }
+    };
+
+    // ================================================================
+    // CLEAR ALL
+    // ================================================================
+
+    clearBtn.addEventListener('click', function() {
+        if (uploadedFiles.length === 0) return;
+        if (confirm('Clear all uploaded files?')) {
+            uploadedFiles = [];
+            renderFiles();
+            updateButtons();
+            previewFrame.srcdoc = 'about:blank';
+            previewOverlay.classList.remove('hidden');
+            previewStatus.textContent = '● Ready';
+            previewStatus.style.color = '#22c55e';
+            deployStatus.style.display = 'none';
+            showToast('🗑️ All files cleared');
+        }
+    });
+
+    // ================================================================
+    // TOAST
+    // ================================================================
+
+    function showToast(message) {
         const existing = document.querySelector('.toast');
         if (existing) existing.remove();
 
         const div = document.createElement('div');
-        div.className = `toast toast-${type}`;
+        div.className = 'toast';
+        div.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 16, 24, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 28px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            z-index: 9999;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            animation: toastSlide 0.3s ease;
+        `;
         div.textContent = message;
         document.body.appendChild(div);
 
@@ -487,169 +408,38 @@
         }, 3000);
     }
 
-    // ===== AUTH =====
-    function login() {
-        const user = loginUser.value.trim();
-        const pass = loginPass.value.trim();
+    // ================================================================
+    // KEYBOARD SHORTCUTS
+    // ================================================================
 
-        if (user === CONFIG.username && pass === CONFIG.password) {
-            isLoggedIn = true;
-            loginOverlay.classList.add('hidden');
-            dashboard.style.display = 'flex';
-            loginError.classList.remove('show');
-            settingsUser.textContent = CONFIG.username;
-            showToast('✅ Selamat datang, ' + CONFIG.username + '!', 'success');
-            updateStats();
-            renderModules();
-            checkShizuku();
-            setInterval(updateStats, 2000);
-            setInterval(checkShizuku, 10000);
-            localStorage.setItem('luchiver_session', 'true');
-        } else {
-            loginError.classList.add('show');
-            loginError.textContent = '❌ Username atau password salah!';
-        }
-    }
-
-    function logout() {
-        isLoggedIn = false;
-        dashboard.style.display = 'none';
-        loginOverlay.classList.remove('hidden');
-        loginPass.value = '';
-        loginError.classList.remove('show');
-        localStorage.removeItem('luchiver_session');
-        showToast('👋 Logout berhasil', 'info');
-    }
-
-    // ===== MODALS =====
-    function openModal(modal) { modal.classList.add('active'); }
-
-    function closeModal(modal) { modal.classList.remove('active'); }
-
-    // ===== EVENTS =====
-    // Login
-    loginBtn.addEventListener('click', login);
-    loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-    loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-
-    // Logout
-    logoutBtn.addEventListener('click', logout);
-
-    // Navigation
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            navigateTo(this.dataset.page);
-        });
-    });
-
-    // Modules
-    installBtn.addEventListener('click', () => openModal(installModal));
-    cancelModalBtn.addEventListener('click', () => closeModal(installModal));
-    closeModalBtn.addEventListener('click', () => closeModal(installModal));
-    installModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(installModal); });
-
-    confirmInstallBtn.addEventListener('click', () => {
-        const name = moduleNameInput.value.trim();
-        if (installModule(name)) closeModal(installModal);
-    });
-    moduleNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') confirmInstallBtn.click(); });
-
-    // Drag & Drop
-    dragArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dragArea.style.borderColor = '#ff0033';
-    });
-    dragArea.addEventListener('dragleave', () => {
-        dragArea.style.borderColor = 'var(--border)';
-    });
-    dragArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dragArea.style.borderColor = 'var(--border)';
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            const name = files[0].name.replace(/\.[^/.]+$/, '');
-            moduleNameInput.value = name;
-            showToast(`📁 File: ${name}`, 'info');
-        }
-    });
-    dragArea.addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.zip,.json,.js';
-        input.onchange = (e) => {
-            if (e.target.files.length > 0) {
-                const name = e.target.files[0].name.replace(/\.[^/.]+$/, '');
-                moduleNameInput.value = name;
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            if (!deployBtn.disabled) {
+                deployBtn.click();
             }
-        };
-        input.click();
-    });
-
-    clearModulesBtn.addEventListener('click', clearModules);
-
-    // Inject
-    injectBtn.addEventListener('click', startInject);
-
-    // Settings
-    changeUserBtn.addEventListener('click', () => {
-        newUsername.value = CONFIG.username;
-        openModal(userModal);
-    });
-    cancelUserModal.addEventListener('click', () => closeModal(userModal));
-    closeUserModal.addEventListener('click', () => closeModal(userModal));
-    userModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(userModal); });
-
-    confirmUserBtn.addEventListener('click', () => {
-        const newUser = newUsername.value.trim();
-        if (newUser && newUser.length > 0) {
-            CONFIG.username = newUser;
-            localStorage.setItem('luchiver_username', newUser);
-            settingsUser.textContent = newUser;
-            showToast('✅ Username diubah!', 'success');
-            closeModal(userModal);
-        } else {
-            showToast('❌ Username tidak boleh kosong!', 'error');
+        }
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            if (!previewBtn.disabled) {
+                previewBtn.click();
+            }
         }
     });
 
-    changePassBtn.addEventListener('click', () => {
-        newPassword.value = '';
-        openModal(passModal);
-    });
-    cancelPassModal.addEventListener('click', () => closeModal(passModal));
-    closePassModal.addEventListener('click', () => closeModal(passModal));
-    passModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(passModal); });
+    // ================================================================
+    // INIT
+    // ================================================================
 
-    confirmPassBtn.addEventListener('click', () => {
-        const newPass = newPassword.value.trim();
-        if (newPass && newPass.length >= 4) {
-            CONFIG.password = newPass;
-            localStorage.setItem('luchiver_password', newPass);
-            showToast('✅ Password diubah!', 'success');
-            closeModal(passModal);
-        } else {
-            showToast('❌ Password minimal 4 karakter!', 'error');
-        }
-    });
-
-    clearAllDataBtn.addEventListener('click', clearAllData);
-
-    // ===== AUTO LOGIN =====
-    if (localStorage.getItem('luchiver_session') === 'true') {
-        loginUser.value = CONFIG.username;
-        loginPass.value = CONFIG.password;
-        login();
-    }
+    updateButtons();
+    renderFiles();
 
     console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║  🔥 LUCHIVER ENGINE v3.0                                ║
-║  📱 Device: ${deviceInfo.device}                          ║
-║  🎮 SOC: ${deviceInfo.soc} | GPU: ${deviceInfo.gpu}       ║
-║  📦 Modules: ${modules.length} installed                  ║
-║  🩸 Theme: Black + Red Premium                          ║
-╚═══════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════╗
+║  🚀 LUCHIVER DEPLOY — REAL DEPLOY TO VERCEL               ║
+║  🔑 API Key: vcp_4utMiDfFAk6P...                           ║
+║  📁 Upload files + Deploy = Live URL                      ║
+║  👨‍💻 Created by @Manzy                                      ║
+╚═══════════════════════════════════════════════════════════════╝
     `);
 
 })();
